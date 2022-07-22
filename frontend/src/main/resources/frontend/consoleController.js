@@ -114,6 +114,29 @@ function setDatabaseType(databaseType) {
 
 function getDatabaseType() {return $localStorage.databaseType}
 
+    function  setUserName(userName) {
+        $localStorage.userName = userName
+    }
+
+    function  getUserName() {
+        return $localStorage.userName
+    }
+
+    function  setPassword(password) {
+        $localStorage.password = password
+    }
+
+    function  getPassword() {
+        return $localStorage.password
+    }
+
+    function  setDBName(dbName) {
+        $localStorage.dbName = dbName
+    }
+
+    function  getDBName() {
+        return $localStorage.dbName
+    }
 
   function addConfigIfNeeded(name, listname) {
     if(!(name in $localStorage.selectedTargets)) {
@@ -199,6 +222,12 @@ function getDatabaseType() {return $localStorage.databaseType}
     getPostgresUrl: getPostgresUrl,
     setDatabaseType: setDatabaseType,
     getDatabaseType: getDatabaseType,
+    setUserName: setUserName,
+    getUserName: getUserName,
+    setPassword: setPassword,
+    getPassword: getPassword,
+      setDBName: setDBName,
+      getDBName: getDBName,
     reset: reset,
     resetSchema: resetSchema,
     handleError: handleError,
@@ -229,28 +258,37 @@ myApp.controller('connectController', ['$scope', '$http', '$window', 'configServ
         configService.clearSchema()
         configService.setPostgresUrl($scope.postgresstr)
         configService.setBaseQuery($scope.baseQuery)
-    	console.log("BASEQUERY:" +$scope.baseQuery)
-    	console.log("PGSTR:"+ $scope.postgresstr)
-    	console.log("PGSTRURL:"+ configService.getPostgresUrl())
+        configService.setDatabaseType($scope.databaseType)
+        configService.setPassword($scope.password)
+        configService.setUserName($scope.userName)
+        configService.setDBName($scope.dbName)
+
+        console.log("BASEQUERY:" +$scope.getBaseQuery())
+        console.log("PGSTR:"+ $scope.postgresstr)
+        console.log("PGSTRURL:"+ configService.getPostgresUrl())
+        console.log("DataBaseType:"+$scope.getDatabaseType())
     }
 
-	$http.put("api/schema",
-	    {
-    	    pgUrl: configService.getPostgresUrl(),
+    $http.put("api/schema",
+        {
+            pgUrl: configService.getPostgresUrl(),
             baseQuery: configService.getBaseQuery(),
-            databaseType: configService.getDatabaseType()
+            databaseType: configService.getDatabaseType(),
+            userName: configService.getUserName(),
+            password: configService.getPassword(),
+            dbName: configService.getDBName(),
         }).then(function(response) {
 
-        configService.handleError(response.data.errorMessage);
+            configService.handleError(response.data.errorMessage);
 
-	    if(!init)
-	        configService.clearSchema();
+            if(!init)
+                configService.clearSchema();
 
-        response.data.schema.columns.sort(function (c1, c2) { return c1.name.localeCompare(c2.name); })
-	    $scope.schemaCols = response.data.schema;
-	    $scope.pg_url = $scope.postgresstr;
-        $scope.spice = $scope.postgresstr;
-	    });
+            response.data.schema.columns.sort(function (c1, c2) { return c1.name.localeCompare(c2.name); })
+            $scope.schemaCols = response.data.schema;
+            $scope.pg_url = $scope.postgresstr;
+            $scope.spice = $scope.postgresstr;
+        });
     };
 
     $scope.sampleRows = function() {
@@ -359,6 +397,10 @@ myApp.controller('analyzeController', ['$scope', '$http', '$window', 'configServ
 	    {
     	        pgUrl: configService.getPostgresUrl(),
     	        baseQuery: configService.getBaseQuery(),
+                userName: configService.getUserName(),
+                password: configService.getPassword(),
+                dbName: configService.getDBName(),
+                databaseType: configService.getDatabaseType(),
     	        attributes: configService.getAttributes(DEFAULT_CONFIG),
     	        highMetrics: configService.getHighMetrics(DEFAULT_CONFIG),
     	        lowMetrics: configService.getLowMetrics(DEFAULT_CONFIG)
@@ -584,6 +626,10 @@ myApp.controller('analyzeController', ['$scope', '$http', '$window', 'configServ
                 {
                     pgUrl: configService.getPostgresUrl(),
             baseQuery: configService.getBaseQuery(),
+                    userName: configService.getUserName(),
+                    password: configService.getPassword(),
+                    dbName: configService.getDBName(),
+                    databaseType: configService.getDatabaseType(),
             columnValues: colVals,
             limit: $scope.plotCount,
             offset: 0
@@ -752,6 +798,10 @@ myApp.controller('analyzeController', ['$scope', '$http', '$window', 'configServ
         $http.post("api/rows/multiple",
                 { pgUrl: configService.getPostgresUrl(),
                     baseQuery: configService.getBaseQuery(),
+                    userName: configService.getUserName(),
+                    password: configService.getPassword(),
+                    dbName: configService.getDBName(),
+                    databaseType: configService.getDatabaseType(),
             columnValues: colVals,
             limit: $scope.plotCount,
             offset: 0
@@ -877,6 +927,10 @@ myApp.controller('exploreController', ['$scope', '$http', 'configService', 'expl
             {
                     pgUrl: configService.getPostgresUrl(),
                     baseQuery: configService.getBaseQuery(),
+                userName: configService.getUserName(),
+                password: configService.getPassword(),
+                dbName: configService.getDBName(),
+                databaseType: configService.getDatabaseType(),
                     columnValues: _items,
                     limit: 100000000,
                     offset: 0,
@@ -899,6 +953,10 @@ myApp.controller('exploreController', ['$scope', '$http', 'configService', 'expl
             {
                     pgUrl: configService.getPostgresUrl(),
                     baseQuery: configService.getBaseQuery(),
+                userName: configService.getUserName(),
+                password: configService.getPassword(),
+                dbName: configService.getDBName(),
+                databaseType: configService.getDatabaseType(),
                     columnValues: _items,
                     limit: 100000000,
                     offset: 0,
@@ -934,6 +992,10 @@ myApp.controller('exploreController', ['$scope', '$http', 'configService', 'expl
 	    {
     	        pgUrl: configService.getPostgresUrl(),
                 baseQuery: configService.getBaseQuery(),
+            userName: configService.getUserName(),
+            password: configService.getPassword(),
+            dbName: configService.getDBName(),
+            databaseType: configService.getDatabaseType(),
                 // silly, but okay
     	        columnValues: _items,
     	        limit: 10,
@@ -1025,6 +1087,10 @@ myApp.controller('exploreController', ['$scope', '$http', 'configService', 'expl
                 {
                     pgUrl: configService.getPostgresUrl(),
                     baseQuery: configService.getBaseQuery(),
+                    userName: configService.getUserName(),
+                    password: configService.getPassword(),
+                    dbName: configService.getDBName(),
+                    databaseType: configService.getDatabaseType(),
                     columnValues: colVals,
                     limit: $scope.plotCount,
                     offset: 0

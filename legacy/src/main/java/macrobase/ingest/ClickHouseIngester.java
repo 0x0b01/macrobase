@@ -12,11 +12,11 @@ public class ClickHouseIngester extends SQLIngester {
 
     @Override
     public String getDriverClass() {
-        return "ru.yandex.clickhouse.ClickHouseDriver";
+        return "com.clickhouse.jdbc.ClickHouseDriver";
     }
 
     @Override
     public String getJDBCUrlPrefix() {
-        return "jdbc:ch:";
+        return "jdbc:clickhouse:";
     }
 }

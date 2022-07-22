@@ -54,8 +54,52 @@
                             <div class="panel-body">
                                 <table>
                                     <tr>
+                                        <td nowrap style="width: 100px;">Database LoaderType:</td>
+                                        <td style="margin: 2px; width: 100%"><input ng-model="databaseType"
+                                                                                    style="width:100%">
+                                        </td>
+                                        <td>
+                                            <button ng-click="updateDB()">submit</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <tr>
                                         <td nowrap style="width: 100px;">Database URL:</td>
                                         <td style="margin: 2px; width: 100%"><input ng-model="postgresstr"
+                                                                                    style="width:100%">
+                                        </td>
+                                        <td>
+                                            <button ng-click="updateDB()">submit</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td nowrap style="width: 100px;">Database UserName:</td>
+                                        <td style="margin: 2px; width: 100%"><input ng-model="userName"
+                                                                                    style="width:100%">
+                                        </td>
+                                        <td>
+                                            <button ng-click="updateDB()">submit</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td nowrap style="width: 100px;">Database Password:</td>
+                                        <td style="margin: 2px; width: 100%"><input ng-model="password"
+                                                                                    style="width:100%">
+                                        </td>
+                                        <td>
+                                            <button ng-click="updateDB()">submit</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td nowrap style="width: 100px;">Database DBName:</td>
+                                        <td style="margin: 2px; width: 100%"><input ng-model="dbName"
                                                                                     style="width:100%">
                                         </td>
                                         <td>
@@ -74,7 +118,6 @@
                                         </td>
                                     </tr>
                                 </table>
-
                             </div>
                         </div>
                         <br>

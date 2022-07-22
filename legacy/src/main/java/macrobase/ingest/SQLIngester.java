@@ -162,6 +162,9 @@ public abstract class SQLIngester extends DataIngester {
 
     private void initializeConnection() throws SQLException {
         if (connection == null) {
+            log.info("dbUrl:{}, dbName:{}, dbUser:{}, dbPassword:{}", dbUrl, dbName, dbUser, dbPassword);
+            log.info(conf.getString(MacroBaseConf.DATA_LOADER_TYPE, "XXX"));
+
             DataSourceFactory factory = new DataSourceFactory();
 
             factory.setDriverClass(getDriverClass());

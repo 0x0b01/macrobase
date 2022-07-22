@@ -12,7 +12,7 @@ public class MySQLIngester extends SQLIngester {
 
     @Override
     public String getDriverClass() {
-        return "com.mysql.jdbc.Driver";
+        return "com.mysql.cj.jdbc.Driver";
     }
 
     @Override

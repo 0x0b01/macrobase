@@ -24,6 +24,9 @@ public class SchemaResource extends BaseResource {
         public String pgUrl;
         public String baseQuery;
         public String databaseType;
+        public String userName;
+        public String dbName;
+        public String password;
     }
 
     static class SchemaResponse {
@@ -57,9 +60,13 @@ public class SchemaResource extends BaseResource {
                 }
                 response.schema = s;
             } else {
+                log.info("request data loader type:{}", request.databaseType);
                 conf.set(MacroBaseConf.DATA_LOADER_TYPE, request.databaseType);
                 conf.set(MacroBaseConf.DB_URL, request.pgUrl);
                 conf.set(MacroBaseConf.BASE_QUERY, request.baseQuery);
+                conf.set(MacroBaseConf.DB_USER, request.userName);
+                conf.set(MacroBaseConf.DB_PASSWORD, request.password);
+                conf.set(MacroBaseConf.DB_NAME, request.dbName);
                 response.schema = ((SQLIngester) getLoader()).getSchema(request.baseQuery);
             }
         } catch (Exception e) {
