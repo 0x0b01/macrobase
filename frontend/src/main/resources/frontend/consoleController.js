@@ -108,6 +108,12 @@ function unmarkForBasicQuery() {
 
   function getBaseQuery() { return $localStorage.baseQuery }
 
+function setDatabaseType(databaseType) {
+    $localStorage.databaseType = databaseType
+}
+
+function getDatabaseType() {return $localStorage.databaseType}
+
 
   function addConfigIfNeeded(name, listname) {
     if(!(name in $localStorage.selectedTargets)) {
@@ -191,6 +197,8 @@ function unmarkForBasicQuery() {
     getBaseQuery: getBaseQuery,
     setPostgresUrl: setPostgresUrl,
     getPostgresUrl: getPostgresUrl,
+    setDatabaseType: setDatabaseType,
+    getDatabaseType: getDatabaseType,
     reset: reset,
     resetSchema: resetSchema,
     handleError: handleError,
@@ -200,8 +208,8 @@ function unmarkForBasicQuery() {
     clearSchema: clearSchema,
     clearAnalysis: clearAnalysis,
     analysisReceived: analysisReceived,
-      markForBasicQuery: markForBasicQuery,
-      unmarkForBasicQuery: unmarkForBasicQuery,
+    markForBasicQuery: markForBasicQuery,
+    unmarkForBasicQuery: unmarkForBasicQuery,
   };
 
 });
@@ -228,9 +236,10 @@ myApp.controller('connectController', ['$scope', '$http', '$window', 'configServ
 
 	$http.put("api/schema",
 	    {
-    	        pgUrl: configService.getPostgresUrl(),
-    	        baseQuery: configService.getBaseQuery() })
-	    .then(function(response) {
+    	    pgUrl: configService.getPostgresUrl(),
+            baseQuery: configService.getBaseQuery(),
+            databaseType: configService.getDatabaseType()
+        }).then(function(response) {
 
         configService.handleError(response.data.errorMessage);
 
@@ -246,7 +255,7 @@ myApp.controller('connectController', ['$scope', '$http', '$window', 'configServ
 
     $scope.sampleRows = function() {
         explorerService.setItems(null)
-	configService.markForBasicQuery()
+	    configService.markForBasicQuery()
         $window.open("explore.html", "_blank")
     }
 

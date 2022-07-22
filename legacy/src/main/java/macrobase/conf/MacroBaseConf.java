@@ -84,7 +84,7 @@ public class MacroBaseConf extends Configuration {
         }
 
         try {
-            if(ingesterType == null) {
+            if (ingesterType == null) {
                 ingesterType = DataIngesterType.valueOf(_conf.get(DATA_LOADER_TYPE));
             }
         } catch (IllegalArgumentException e) {
@@ -94,13 +94,15 @@ public class MacroBaseConf extends Configuration {
                 Object ao = cons.newInstance(this);
 
                 if (!(ao instanceof DataIngester)) {
-                    throw new ConfigurationException(String.format("%s is not an instance of DataIngester", ao.toString()));
+                    throw new ConfigurationException(
+                            String.format("%s is not an instance of DataIngester", ao.toString()));
                 }
 
-                return (DataIngester)ao;
+                return (DataIngester) ao;
             } catch (Exception e2) {
                 log.error("an error occurred creating ingester", e2);
-                throw new ConfigurationException(String.format("error instantiating ingester of type %s: %s", _conf.get(DATA_LOADER_TYPE), e2.getMessage()));
+                throw new ConfigurationException(String.format("error instantiating ingester of type %s: %s",
+                        _conf.get(DATA_LOADER_TYPE), e2.getMessage()));
             }
         }
 
@@ -114,6 +116,8 @@ public class MacroBaseConf extends Configuration {
             return new MySQLIngester(this);
         } else if (ingesterType == DataIngesterType.CACHING_MYSQL_LOADER) {
             return new DiskCachingIngester(this, new MySQLIngester(this));
+        } else if (ingesterType == DataIngesterType.CLICKHOUSE_LOADER) {
+            return new ClickHouseIngester(this);
         }
 
         throw new ConfigurationException(String.format("Unknown data loader type: %s", ingesterType));
@@ -151,12 +155,12 @@ public class MacroBaseConf extends Configuration {
 
         TransformType transformType = null;
 
-        if(!_conf.containsKey(TRANSFORM_TYPE)) {
+        if (!_conf.containsKey(TRANSFORM_TYPE)) {
             transformType = MacroBaseDefaults.TRANSFORM_TYPE;
         }
 
         try {
-            if(transformType == null) {
+            if (transformType == null) {
                 transformType = TransformType.valueOf(_conf.get(TRANSFORM_TYPE));
             }
         } catch (IllegalArgumentException e) {
@@ -166,13 +170,15 @@ public class MacroBaseConf extends Configuration {
                 Object ao = cons.newInstance(this);
 
                 if (!(ao instanceof BatchTrainScore)) {
-                    throw new ConfigurationException(String.format("%s is not an instance of BatchTrainScore", ao.toString()));
+                    throw new ConfigurationException(
+                            String.format("%s is not an instance of BatchTrainScore", ao.toString()));
                 }
 
-                return (BatchTrainScore)ao;
+                return (BatchTrainScore) ao;
             } catch (Exception e2) {
                 log.error("an error occurred creating transform", e2);
-                throw new ConfigurationException(String.format("error instantiating transform of type %s: %s", _conf.get(TRANSFORM_TYPE), e2.getMessage()));
+                throw new ConfigurationException(String.format("error instantiating transform of type %s: %s",
+                        _conf.get(TRANSFORM_TYPE), e2.getMessage()));
             }
         }
 
@@ -210,9 +216,9 @@ public class MacroBaseConf extends Configuration {
         POSTGRES_LOADER,
         CACHING_POSTGRES_LOADER,
         MYSQL_LOADER,
-        CACHING_MYSQL_LOADER
+        CACHING_MYSQL_LOADER,
+        CLICKHOUSE_LOADER
     }
-
 
     private Map<String, String> _conf;
 
@@ -299,7 +305,6 @@ public class MacroBaseConf extends Configuration {
         }
         return defaultValue;
     }
-
 
     public Integer getInt(String key) throws ConfigurationException {
         if (!_conf.containsKey(key)) {

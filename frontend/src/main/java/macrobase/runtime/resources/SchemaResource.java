@@ -23,6 +23,7 @@ public class SchemaResource extends BaseResource {
     static class SchemaRequest {
         public String pgUrl;
         public String baseQuery;
+        public String databaseType;
     }
 
     static class SchemaResponse {
@@ -46,16 +47,17 @@ public class SchemaResource extends BaseResource {
 
         try {
             // temp hack to enable CSV loading
-            if(request.baseQuery.contains("csv://")) {
+            if (request.baseQuery.contains("csv://")) {
                 File csvFile = new File(request.baseQuery.replace("csv://", ""));
                 CSVParser p = CSVParser.parse(csvFile, Charset.defaultCharset(), CSVFormat.DEFAULT.withHeader());
 
                 Schema s = new Schema(new ArrayList<>());
-                for(String header : p.getHeaderMap().keySet()) {
+                for (String header : p.getHeaderMap().keySet()) {
                     s.getColumns().add(new Schema.SchemaColumn(header, "entry"));
                 }
                 response.schema = s;
             } else {
+                conf.set(MacroBaseConf.DATA_LOADER_TYPE, request.databaseType);
                 conf.set(MacroBaseConf.DB_URL, request.pgUrl);
                 conf.set(MacroBaseConf.BASE_QUERY, request.baseQuery);
                 response.schema = ((SQLIngester) getLoader()).getSchema(request.baseQuery);
