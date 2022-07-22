@@ -1,6 +1,5 @@
 package macrobase.runtime.resources;
 
-import macrobase.MacroBase;
 import macrobase.conf.ConfigurationException;
 import macrobase.conf.MacroBaseConf;
 import macrobase.conf.MacroBaseDefaults;
@@ -23,7 +22,7 @@ abstract public class BaseResource {
 
         this.conf = conf;
         configuredIngester = conf.getString(MacroBaseConf.DATA_LOADER_TYPE,
-                                            MacroBaseDefaults.DATA_LOADER_TYPE.toString());
+                MacroBaseDefaults.DATA_LOADER_TYPE.toString());
         configuredDBUser = conf.getString(MacroBaseConf.DB_USER, MacroBaseDefaults.DB_USER);
         configuredDBPassword = conf.getString(MacroBaseConf.DB_PASSWORD, MacroBaseDefaults.DB_PASSWORD);
         configuredDBName = conf.getString(MacroBaseConf.DB_NAME, MacroBaseDefaults.DB_NAME);
@@ -35,11 +34,11 @@ abstract public class BaseResource {
         // ^ used to be initially, now it's just whatever it currently is to work for CSV
         // or the default ingester
         // by default, REST calls may not have these defined.
-//        conf.set(MacroBaseConf.DATA_LOADER_TYPE, configuredIngester);
-//        conf.set(MacroBaseConf.DB_URL, configuredDBUrl);
-//        conf.set(MacroBaseConf.DB_NAME, configuredDBName);
-//        conf.set(MacroBaseConf.DB_USER, configuredDBUser);
-//        conf.set(MacroBaseConf.DB_PASSWORD, configuredDBPassword);
+        // conf.set(MacroBaseConf.DATA_LOADER_TYPE, configuredIngester);
+        // conf.set(MacroBaseConf.DB_URL, configuredDBUrl);
+        // conf.set(MacroBaseConf.DB_NAME, configuredDBName);
+        // conf.set(MacroBaseConf.DB_USER, configuredDBUser);
+        // conf.set(MacroBaseConf.DB_PASSWORD, configuredDBPassword);
         conf.set(MacroBaseConf.ATTRIBUTES, new ArrayList<>());
         conf.set(MacroBaseConf.METRICS, new ArrayList<>());
         return conf.constructIngester();
